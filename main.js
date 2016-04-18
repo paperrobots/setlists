@@ -199,7 +199,7 @@ if (Meteor.isClient) {
         'submit form': function(event){
             event.preventDefault();
             var gigDate = $('[name=gigDate]').val();
-            var numberOfSongs = ($('[name=numberOfSongs]') != '') ? 0 : parseInt($('[name=numberOfSongs]').val());
+            var numberOfSongs = ($('[name=numberOfSongs]').val() != '') ? parseInt($('[name=numberOfSongs]').val()): parseInt(0);
             var venueName = $('[name=venueName]').val();
             Meteor.call('createNewList', gigDate, numberOfSongs, venueName, function(error, results){
                 if(error){
@@ -255,7 +255,6 @@ if (Meteor.isServer){
 
 
     function generateList(songs){
-        //get X number of songs including the opener or closer if they exist
         var sticky = Songs.find({
             $or: [{
                 sticky: 'opener'
@@ -264,11 +263,12 @@ if (Meteor.isServer){
             }]
         }).fetch();
 
-
         var allSongs = Songs.find({sticky: null}).fetch();
         var randomSongs = shuffleObject(allSongs);
+
+        console.log(songs);
         //Trim the list
-        if (songs != 0){
+        if (songs != 0 || songs != ''){
             var l = sticky.length;
             var n = (songs > l) ? songs - l : l;
             var c = randomSongs.length;
@@ -280,6 +280,7 @@ if (Meteor.isServer){
 
         return randomSongs;
     }
+
 
     Meteor.publish('lists', function(){
         var currentUser = this.userId;
