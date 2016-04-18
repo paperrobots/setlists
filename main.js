@@ -255,7 +255,8 @@ if (Meteor.isServer){
 
 
     function generateList(songs){
-        var sticky = Songs.find({
+        var currentUser = Meteor.userId();
+        var sticky = Songs.find({createdBy: currentUser,
             $or: [{
                 sticky: 'opener'
             }, {
@@ -263,10 +264,9 @@ if (Meteor.isServer){
             }]
         }).fetch();
 
-        var allSongs = Songs.find({sticky: null}).fetch();
+        var allSongs = Songs.find({sticky: null, createdBy: currentUser}).fetch();
         var randomSongs = shuffleObject(allSongs);
 
-        console.log(songs);
         //Trim the list
         if (songs != 0 || songs != ''){
             var l = sticky.length;
@@ -275,8 +275,17 @@ if (Meteor.isServer){
             var randomSongs = (c > n) ? randomSongs.slice(0,n) : randomSongs;
         }
 
-        randomSongs.unshift(sticky[0]);
-        randomSongs.push(sticky[1]);
+        // I don't like this but it's all that's working for me right now
+        if (sticky[0].sticky == 'opener'){
+            randomSongs.unshift(sticky[0]);
+        } else if (sticky[1].sticky == 'opener'){
+            randomSongs.unshift(sticky[1]);
+        }
+        if (sticky[0].sticky == 'closer'){
+            randomSongs.push(sticky[0]);
+        } else if (sticky[1].sticky == 'closer'){
+            randomSongs.push(sticky[1]);
+        }
 
         return randomSongs;
     }

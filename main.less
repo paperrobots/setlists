@@ -31,9 +31,19 @@ a {
     text-decoration: none;
 }
 
+.btn {
+    width: 100%;
+    text-align: center;
+    background: @highlight-red;
+    color: white;
+    display: block;
+    padding: 10px;
+    font-size: 18px;
+}
+
 .row {
     .col {
-        max-width: 500px;
+        max-width: 600px;
         width: 100%;
         margin: 0 auto;
         padding: 0 10px;
@@ -86,7 +96,8 @@ header {
             display: block;
         }
         .user {
-            display: block;
+            display: inline-block;
+            float: left;
             margin-bottom: 5px;
         }
 
@@ -199,9 +210,13 @@ label.error {
     background-size: cover;
     width: 100%;
     height: 100%;
-    padding-top: 50px;
+    padding-top: 60px;
     padding-bottom: 80px;
     overflow: auto;
+
+    h2 {
+        font-size: 40px;
+    }
 }
 
 #songs {
@@ -322,7 +337,6 @@ label.error {
         display: inline-block;
         width: auto;
         max-width: 400px;
-        width: 100%;
         height: 76px;
         .inner {
             display: flex;
@@ -355,11 +369,33 @@ label.error {
     margin: 30px 0 ;
 }
 
+.newListCallout, .newSongCallout {
+    font-size: 20px;
+    margin-top: 50px;
+    text-align: center;
+    a {
+        display: block;
+        background: @highlight-red;
+        padding: 10px;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    label {
+        text-align: left;
+    }
+}
+
+
 footer {
     background: @primary-dark;
     position: fixed;
     bottom: 0;
     width: 100%;
+
+    .row .col {
+        padding: 0;
+    }
 
     nav {
         ul {
@@ -375,13 +411,13 @@ footer {
             background: @primary-dark;
 
             &.active {
-                background: lighten(@primary-dark, 20%);
+                border-top: 5px solid white;
             }
 
             &.list {
                 background: @highlight-red;
                 &.active {
-                    background: @highlight-blue;
+                    border-top: 5px solid white;
                 }
             }
 
@@ -395,7 +431,11 @@ footer {
                 width: 100%;
                 height: 70px;
                 font-size: 30px;
-
+                span {
+                    font-size: 10px;
+                    display: inline-block;
+                    margin-top: 3px;
+                }
             }
         }
 
