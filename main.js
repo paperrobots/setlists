@@ -6,6 +6,9 @@ if (Meteor.isClient) {
 
     Template.login.onRendered(function(){
         var validator = $('.login').validate({
+            errorPlacement: function(error, element) {
+               error.insertBefore(element);
+            },
             submitHandler: function(event){
                 var email = $('[name=email]').val();
                 var password = $('[name=password]').val();
@@ -33,6 +36,9 @@ if (Meteor.isClient) {
 
     Template.register.onRendered(function(){
         var validator = $('.register').validate({
+            errorPlacement: function(error, element) {
+               error.insertBefore(element);
+            },
             submitHandler: function(event){
                 var email = $('[name=email]').val();
                 var password = $('[name=password]').val();
@@ -57,6 +63,18 @@ if (Meteor.isClient) {
         });
     });
 
+
+    Template.registerHelper('formatDate', function(date) {
+      return moment(date).format('MMMM Do, YYYY');
+    });
+
+    Template.navigation.helpers({
+        activeIfTemplateIs: function (template) {
+          var currentRoute = Router.current();
+          return currentRoute &&
+            template === currentRoute.lookupTemplate() ? 'active' : '';
+        }
+      });
 
 
     Template.songs.onCreated(function(){
@@ -205,11 +223,16 @@ if (Meteor.isClient) {
         }
     });
 
-    Template.navigation.events({
+    Template.main.events({
         'click .logout': function(event){
             event.preventDefault();
             Meteor.logout();
             Router.go('login');
+        },
+        'click .toggle-account-menu': function(event){
+            event.preventDefault();
+            console.log('test');
+            $('#login').toggleClass('open');
         }
     });
 

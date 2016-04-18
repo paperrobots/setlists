@@ -12,7 +12,9 @@ Router.route('/register');
 
 Router.route('/login');
 
-Router.route('/songs');
+Router.route('/songs', {
+    template: 'songs',
+});
 
 Router.route('/generate', {
     template: 'addList',

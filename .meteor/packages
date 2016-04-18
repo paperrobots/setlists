@@ -22,3 +22,4 @@ accounts-password
 accounts-ui
 themeteorchef:jquery-validation
 check
+momentjs:moment
