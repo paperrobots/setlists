@@ -16,7 +16,7 @@
         {{> lists}}
     {{else}}
         <div id="home" class="page">
-            <h1>Setlists</h1>
+            <h1><a href="{{pathFor route='home'}}">Setlists</a></h1>
             <div class="login-wrap">
                 To get started
                 <a href="{{pathFor route='login'}}">Login</a>
@@ -172,7 +172,7 @@
 
 <template name="register">
 <div class="page">
-    <h1>Setlists</h1>
+    <h1><a href="{{pathFor route='home'}}">Setlists</a></h1>
 
     <div class="login-wrap">
         <h2>Register</h2>
@@ -187,7 +187,7 @@
 
 <template name="login">
 <div class="page">
-    <h1>Setlists</h1>
+    <h1><a href="{{pathFor route='home'}}">Setlists</a></h1>
 
     <div class="login-wrap">
         <h2>Login</h2>
