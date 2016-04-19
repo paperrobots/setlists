@@ -80,9 +80,6 @@
             {{#if song.count}}
             {{> addSong}}
             <ul class="song-list">
-                <li class="legend">
-                    <span>Opening Song</span><span>Closing Song</span>
-                </li>
                 {{#each song}}
                 {{> songItem}}
                 {{/each}}
@@ -101,8 +98,7 @@
     <li>
         <div class="inputs">
             <div class="inner">
-                <input type="radio" name="stickyOpener" value="opener" {{checked 'opener'}} />
-                <input type="radio" name="stickyCloser" value="closer" {{checked 'closer'}} />
+                <a href="#encore" class="encore {{checked 'encore'}}"><i class="fa fa-star-o"></i><i class="fa fa-star"></i>Encore</a>
                 <input type="text" value="{{songTitle}}" name="songItem" />
             </div>
         </div>

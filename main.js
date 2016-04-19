@@ -89,10 +89,10 @@ if (Meteor.isClient) {
     });
 
     Template.songItem.helpers({
-        'checked': function(sticky){
-            var isSticky = this.sticky;
-            if(isSticky == sticky){
-                return "checked";
+        'checked': function(encore){
+            var isEncore = this.encore;
+            if(isEncore == encore){
+                return "hasEncore";
             } else {
                 return "";
             }
@@ -140,16 +140,43 @@ if (Meteor.isClient) {
                 });
             }
         }, 500),
-        'change [type=radio]': function(event){
+        'click .encore': function(event){
+            var isEncore = $(event.target).hasClass('isEncore');
             var songId = this._id;
-            var isSticky = $(event.target).val();
-            var isntSticky = (isSticky == 'opener') ? 'closer' : 'opener';
-            $(event.target).siblings('[value=' + isntSticky + ']').prop('checked', false);
-            var currentSticky = Songs.findOne({sticky: isSticky});
-            if (currentSticky){
+
+            if (isEncore == 'encore'){
+                $(event.target).toggleClass('hasEncore');
                 var data = {
-                    _id: currentSticky._id,
-                    sticky: null
+                    _id: songId,
+                    encore: null,
+                }
+
+                Meteor.call('updateSong', data, function(error, results){
+                    if(error){
+                        console.log(error.reason);
+                    }
+                });
+            } else {
+                $('.hasEncore').removeClass('hasEncore');
+                $(event.target).toggleClass('hasEncore');
+
+                var currentEncore = Songs.findOne({encore: 'encore'});
+                if (currentEncore){
+                    var data = {
+                        _id: currentEncore._id,
+                        encore: null
+                    }
+
+                    Meteor.call('updateSong', data, function(error, results){
+                        if(error){
+                            console.log(error.reason);
+                        }
+                    });
+                }
+
+                var data = {
+                    _id: songId,
+                    encore: 'encore',
                 }
 
                 Meteor.call('updateSong', data, function(error, results){
@@ -158,17 +185,6 @@ if (Meteor.isClient) {
                     }
                 });
             }
-
-            var data = {
-                _id: songId,
-                sticky: isSticky,
-            }
-
-            Meteor.call('updateSong', data, function(error, results){
-                if(error){
-                    console.log(error.reason);
-                }
-            });
         }
     });
 
@@ -256,35 +272,21 @@ if (Meteor.isServer){
 
     function generateList(songs){
         var currentUser = Meteor.userId();
-        var sticky = Songs.find({createdBy: currentUser,
-            $or: [{
-                sticky: 'opener'
-            }, {
-                sticky: 'closer'
-            }]
-        }).fetch();
-
-        var allSongs = Songs.find({sticky: null, createdBy: currentUser}).fetch();
+        var encore = Songs.find({createdBy: currentUser,  encore: 'encore'}).fetch();
+        var allSongs = Songs.find({encore: null, createdBy: currentUser}).fetch();
         var randomSongs = shuffleObject(allSongs);
 
-        //Trim the list
+        //Trim the list to the specified amount of songs
         if (songs != 0 || songs != ''){
-            var l = sticky.length;
+            var l = encore.length;
             var n = (songs > l) ? songs - l : l;
             var c = randomSongs.length;
             var randomSongs = (c > n) ? randomSongs.slice(0,n) : randomSongs;
         }
 
-        // I don't like this but it's all that's working for me right now
-        if (sticky[0].sticky == 'opener'){
-            randomSongs.unshift(sticky[0]);
-        } else if (sticky[1].sticky == 'opener'){
-            randomSongs.unshift(sticky[1]);
-        }
-        if (sticky[0].sticky == 'closer'){
-            randomSongs.push(sticky[0]);
-        } else if (sticky[1].sticky == 'closer'){
-            randomSongs.push(sticky[1]);
+        // Throw the encore on the end of the list
+        if (encore[0].encore == 'encore'){
+            randomSongs.push(encore[0]);
         }
 
         return randomSongs;
@@ -337,7 +339,7 @@ if (Meteor.isServer){
             data = {
                 songTitle: songTitle,
                 createdBy: currentUser,
-                sticky: null,
+                encore: null,
             }
 
             if(!currentUser){
@@ -349,7 +351,7 @@ if (Meteor.isServer){
         },
         updateSong: function(data){
             if (data.songTitle) check(data.songTitle, String);
-            if (data.sticky) check(data.sticky, String);
+            if (data.encore) check(data.encore, String);
             var songId = Songs.findOne(data._id);
             var currentUser = Meteor.userId();
             return Songs.update({

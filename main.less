@@ -135,6 +135,7 @@ label {
 input[type=radio] {
     width: 30px;
     height: 30px;
+    display: none;
 }
 
 input[type=submit]{
@@ -234,6 +235,31 @@ label.error {
         list-style: none;
     }
 
+    .encore {
+        text-align: center;
+        display: inline-block;
+        width: 80px;
+        padding: 20px 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        i {
+            margin-bottom: 3px;
+            display: block;
+            font-size: 20px;
+            &.fa-star {
+                display: none;
+            }
+        }
+        &.hasEncore {
+            i {
+                &.fa-star {
+                    display: block;
+                }
+                &.fa-star-o {
+                    display: none;
+                }
+            }
+        }
+    }
 }
 
 .page {
@@ -298,17 +324,6 @@ label.error {
         float: left;
         width: 100%;
         margin-bottom: 7px;
-
-        &.legend {
-            background: none;
-            span {
-                display: inline-block;
-                width: 40px;
-                font-size: 10px;
-                text-align: center;
-                margin-right: 5px;
-            }
-        }
     }
 
     a {
@@ -325,12 +340,14 @@ label.error {
         }
     }
     a.delete-list, a.delete-song {
-        width: 80px;
+        width: 60px;
+        display: block;
         float: right;
-        font-size: 30px;
+        font-size: 20px;
+        height: 100%;
         border-left: 1px solid rgba(255,255,255,0.2);
         text-align: center;
-        padding: 20px;
+        padding: 26px 20px;
     }
 
     .inputs {
@@ -341,10 +358,10 @@ label.error {
         .inner {
             display: flex;
             align-items: center;
-
             height: 100%;
         }
     }
+
 
     input { float: left;  }
     input[type=text] {
