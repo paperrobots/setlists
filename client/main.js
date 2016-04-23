@@ -1,9 +1,5 @@
 import '/imports/startup/client';
 
-Songs = new Mongo.Collection('songs');
-Lists = new Mongo.Collection('lists');
-
-
 
 Template.login.onRendered(function(){
     var validator = $('.login').validate({

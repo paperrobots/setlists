@@ -1,0 +1,35 @@
+<template name="main">
+    {{#if currentUser}}
+    <header>
+        <div class="row">
+            <div class="col">
+                <h1>Setlists</h1>
+                <button class="toggle-account-menu"><i class="fa fa-user"></i></button>
+                <div id="login">
+                        {{#if currentUser}}
+                        <span class="user">{{currentUser.emails.[0].address}}</span>
+                        <a href="#" class="logout">Logout</a>
+                        {{else}}
+                        <li><a href="{{pathFor route='register'}}">Register</a></li>
+                        <li><a href="{{pathFor route='login'}}">Login</a></li>
+                        {{/if}}
+                </div>
+            </div>
+        </div>
+    </header>
+    {{/if}}
+
+    <div id="container">
+        {{> yield}}
+    </div>
+
+    {{#if currentUser}}
+    <footer>
+        <div class="row">
+            <div class="col">
+                {{> navigation}}
+            </div>
+        </div>
+    </footer>
+    {{/if}}
+</template>

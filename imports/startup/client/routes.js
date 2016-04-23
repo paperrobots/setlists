@@ -1,3 +1,6 @@
+import '../../ui/layouts/body.js';
+
+
 Router.configure({
     layoutTemplate: 'main',
     loadingTemplate: 'loading'
