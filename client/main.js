@@ -1,70 +1,68 @@
 import '/imports/startup/client';
 
-
 Songs = new Mongo.Collection('songs');
 Lists = new Mongo.Collection('lists');
 
 
-if (Meteor.isClient) {
 
-    Template.login.onRendered(function(){
-        var validator = $('.login').validate({
-            errorPlacement: function(error, element) {
-               error.insertBefore(element);
-            },
-            submitHandler: function(event){
-                var email = $('[name=email]').val();
-                var password = $('[name=password]').val();
-                Meteor.loginWithPassword(email, password, function(error){
-                    if(error){
-                        if(error.reason == "User not found"){
-                            validator.showErrors({
-                                email: error.reason
-                            });
-                        }
-                        if(error.reason == "Incorrect password"){
-                            validator.showErrors({
-                                password: error.reason
-                            });
-                        }
-                    } else {
-                        Router.go("home");
+Template.login.onRendered(function(){
+    var validator = $('.login').validate({
+        errorPlacement: function(error, element) {
+           error.insertBefore(element);
+        },
+        submitHandler: function(event){
+            var email = $('[name=email]').val();
+            var password = $('[name=password]').val();
+            Meteor.loginWithPassword(email, password, function(error){
+                if(error){
+                    if(error.reason == "User not found"){
+                        validator.showErrors({
+                            email: error.reason
+                        });
                     }
-                });
-            }
-        });
-    });
-
-
-
-    Template.register.onRendered(function(){
-        var validator = $('.register').validate({
-            errorPlacement: function(error, element) {
-               error.insertBefore(element);
-            },
-            submitHandler: function(event){
-                var email = $('[name=email]').val();
-                var password = $('[name=password]').val();
-                Accounts.createUser({
-                    email: email,
-                    password: password
-                }, function(error){
-                    if(error){
-                        if(error.reason == "Email already exists."){
-                            validator.showErrors({
-                                email: "That email already belongs to a registered user."
-                            });
-                        }
-                    } else {
-                        var currentRoute = Router.current().route.getName();
-                        if(currentRoute == "login" || currentRoute == "register"){
-                            Router.go("songs");
-                        }
+                    if(error.reason == "Incorrect password"){
+                        validator.showErrors({
+                            password: error.reason
+                        });
                     }
-                });
-            }
-        });
+                } else {
+                    Router.go("home");
+                }
+            });
+        }
     });
+});
+
+
+
+Template.register.onRendered(function(){
+    var validator = $('.register').validate({
+        errorPlacement: function(error, element) {
+           error.insertBefore(element);
+        },
+        submitHandler: function(event){
+            var email = $('[name=email]').val();
+            var password = $('[name=password]').val();
+            Accounts.createUser({
+                email: email,
+                password: password
+            }, function(error){
+                if(error){
+                    if(error.reason == "Email already exists."){
+                        validator.showErrors({
+                            email: "That email already belongs to a registered user."
+                        });
+                    }
+                } else {
+                    var currentRoute = Router.current().route.getName();
+                    if(currentRoute == "login" || currentRoute == "register"){
+                        Router.go("songs");
+                    }
+                }
+            });
+        }
+    });
+});
 
 
     Template.registerHelper('formatDate', function(date) {
@@ -144,6 +142,7 @@ if (Meteor.isClient) {
             }
         }, 500),
         'click .encore': function(event){
+            event.preventDefault();
             var isEncore = $(event.target).hasClass('isEncore');
             var songId = this._id;
 
@@ -250,126 +249,9 @@ if (Meteor.isClient) {
         },
         'click .toggle-account-menu': function(event){
             event.preventDefault();
-            console.log('test');
             $('#login').toggleClass('open');
         }
     });
 
 
 
-} // isClient
-
-if (Meteor.isServer){
-
-    function shuffleObject(obj){
-        for (var i = 0; i < obj.length - 1; i++) {
-            var j = i + Math.floor(Math.random() * (obj.length - i));
-
-            var temp = obj[j];
-            obj[j] = obj[i];
-            obj[i] = temp;
-        }
-        return obj;
-    }
-
-
-    function generateList(songs){
-        var currentUser = Meteor.userId();
-        var encore = Songs.find({createdBy: currentUser,  encore: 'encore'}).fetch();
-        var allSongs = Songs.find({encore: null, createdBy: currentUser}).fetch();
-        var randomSongs = shuffleObject(allSongs);
-
-        //Trim the list to the specified amount of songs
-        if (songs != 0 || songs != ''){
-            var l = encore.length;
-            var n = (songs > l) ? songs - l : l;
-            var c = randomSongs.length;
-            var randomSongs = (c > n) ? randomSongs.slice(0,n) : randomSongs;
-        }
-
-        // Throw the encore on the end of the list
-        if (encore[0].encore == 'encore'){
-            randomSongs.push(encore[0]);
-        }
-
-        return randomSongs;
-    }
-
-
-    Meteor.publish('lists', function(){
-        var currentUser = this.userId;
-        return Lists.find({ createdBy: currentUser });
-    });
-
-    Meteor.publish('songs', function(currentList){
-        var currentUser = this.userId;
-        return Songs.find({ createdBy: currentUser, listId: currentList })
-    });
-
-    Meteor.methods({
-
-        createNewList: function(gigDate, numberOfSongs, venueName){
-            check(gigDate, String);
-            check(venueName, String);
-            check(numberOfSongs, Number);
-
-            var currentUser = Meteor.userId();
-            var theList = generateList(numberOfSongs);
-
-            var data = {
-                  gigDate: gigDate,
-                  venueName: venueName,
-                  createdBy: currentUser,
-                  theList: theList,
-            }
-
-            if(!currentUser){
-                throw new Meteor.Error("not-logged-in", "You're not logged-in.");
-            }
-
-            return Lists.insert(data);
-
-        },
-        removeList: function(listId){
-            var listId = Lists.findOne(listId);
-            var currentUser = Meteor.userId();
-            return Lists.remove({ _id: listId._id, createdBy: currentUser });
-        },
-        addSong: function(songTitle){
-            check(songTitle, String);
-            var currentUser = Meteor.userId();
-
-            data = {
-                songTitle: songTitle,
-                createdBy: currentUser,
-                encore: null,
-            }
-
-            if(!currentUser){
-                throw new Meteor.Error("not-logged-in", "You're not logged-in.");
-            }
-
-            return Songs.insert(data);
-
-        },
-        updateSong: function(data){
-            if (data.songTitle) check(data.songTitle, String);
-            if (data.encore) check(data.encore, String);
-            var songId = Songs.findOne(data._id);
-            var currentUser = Meteor.userId();
-            return Songs.update({
-                _id: songId._id,
-                createdBy: currentUser,
-            },
-            {
-                $set: data
-            });
-        },
-        removeSong: function(songId){
-            var songId = Songs.findOne(songId);
-            var currentUser = Meteor.userId();
-            return Songs.remove({ _id: songId._id, createdBy: currentUser });
-        }
-    });
-
-} // isServer
