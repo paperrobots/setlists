@@ -3,24 +3,5 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css">
     <link href='https://fonts.googleapis.com/css?family=Josefin+Slab:300,700;Ralway:300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-
 </head>
-
-<body>
-</body>
-
-<template name="navigation">
-    <nav>
-        <ul>
-            <li class="lists {{ activeIfTemplateIs 'home' }}"><a href="{{pathFor route='home'}}"><i class="fa fa-list"></i><span>Setlists</span></a></li>
-            <li class="list {{ activeIfTemplateIs 'addList' }}"><a href="{{pathFor route='generate'}}" class=""><i class="fa fa-plus"></i><span>New List</span></a></li>
-            <li class="songs {{ activeIfTemplateIs 'songs' }}"><a href="{{pathFor route='songs'}}"><i class="fa fa-music"></i><span>Songs</span></a></li>
-        </ul>
-    </nav>
-</template>
-
-<template name="loading">
-<p>Loading...</p>
-</template>

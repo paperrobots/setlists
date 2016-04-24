@@ -1,4 +1,5 @@
 import './body.html';
+import '../components/navigation.js';
 import '../pages/songs.js';
 import '../pages/lists.js';
 import '../accounts/login.js';

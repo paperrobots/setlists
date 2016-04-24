@@ -1,0 +1,9 @@
+<template name="navigation">
+    <nav>
+        <ul>
+            <li class="lists {{ activeIfTemplateIs 'home' }}"><a href="{{pathFor route='home'}}"><i class="fa fa-list"></i><span>Setlists</span></a></li>
+            <li class="list {{ activeIfTemplateIs 'addList' }}"><a href="{{pathFor route='generate'}}" class=""><i class="fa fa-plus"></i><span>New List</span></a></li>
+            <li class="songs {{ activeIfTemplateIs 'songs' }}"><a href="{{pathFor route='songs'}}"><i class="fa fa-music"></i><span>Songs</span></a></li>
+        </ul>
+    </nav>
+</template>
