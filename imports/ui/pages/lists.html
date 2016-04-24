@@ -1,0 +1,70 @@
+<template name="home">
+    {{#if currentUser}}
+        {{> lists}}
+    {{else}}
+        <div id="home" class="page">
+            <h1><a href="{{pathFor route='home'}}">Setlists</a></h1>
+            <div class="login-wrap">
+                To get started
+                <a href="{{pathFor route='login'}}">Login</a>
+                - or -
+                <a href="{{pathFor route='register'}}">Register</a>
+            </div>
+        </div>
+    {{/if}}
+</template>
+
+<template name="addList">
+    <div id="addList" class="row">
+        <div class="col">
+            <h2>New Setlist</h2>
+            <form class="addList">
+                <p><label>Date of the gig?</label>
+                <input type="date" name="gigDate" required /></p>
+                <p><label>How many songs? </label>
+                <input type="number" name="numberOfSongs" min="2" placeholder="Minimum of 2 or leave blank to include all songs" /><br /></p>
+                <p><label>Venue</label>
+                    <input type="text" name="venueName" placeholder="Mac's Bar" />
+                </p>
+                <input type="submit" name="generateSetlist" value="Generate Setlist" />
+            </form>
+        </div>
+    </div>
+</template>
+
+<template name="lists">
+    <div id="lists" class="row">
+        <div class="col">
+        {{#if Template.subscriptionsReady}}
+            {{#if list.count}}
+                <ul class="gig-list">
+                    {{#each list}}
+                        <li><a href="/list/{{_id}}"><span>{{formatDate gigDate}} <strong>@ {{venueName}}</strong></span> {{theList.length}} Songs</a> <a href="#" class="delete-list"><i class="fa fa-trash"></i></a></li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <div class="newListCallout">
+                    Generate a new list to start rocking!
+                    <a href="{{pathFor route='generate'}}"><i class="fa fa-plus"></i></a>
+                </div>
+            {{/if}}
+        {{else}}
+            {{> loading}}
+        {{/if}}
+        </div>
+    </div>
+</template>
+
+<template name="listPage">
+    <div id="list" class="row page">
+        <div class="col">
+            <h2>{{formatDate gigDate}} {{#if venueName}} <strong>@ {{venueName}}</strong>{{/if}}</h2>
+            <ul>
+                {{#each theList}}
+                <li>{{songTitle}}</li>
+                {{/each}}
+            </ul>
+            <a href="#" class="btn">Send To Bandmates</a>
+        </div>
+    </div>
+</template>

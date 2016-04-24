@@ -1,3 +1,5 @@
+import './register.html';
+
 Template.register.onRendered(function(){
     var validator = $('.register').validate({
         errorPlacement: function(error, element) {

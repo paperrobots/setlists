@@ -1,0 +1,40 @@
+<template name="songs">
+    <div id="songs" class="row">
+        <div class="col">
+            {{#if song.count}}
+            {{> addSong}}
+            <ul class="song-list">
+                {{#each song}}
+                {{> songItem}}
+                {{/each}}
+            </ul>
+            {{else}}
+                <div class="newSongCallout">
+                    <h2>Before you can generate new setlists you'll need to add some songs!</h2>
+                    {{> addSong}}
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</template>
+
+<template name="songItem">
+    <li>
+        <div class="inputs">
+            <div class="inner">
+                <a href="#" class="encore {{checked 'encore'}}"><i class="fa fa-star-o"></i><i class="fa fa-star"></i>Encore</a>
+                <input type="text" value="{{songTitle}}" name="songItem" />
+            </div>
+        </div>
+        <a href="#" class="delete-song"><i class="fa fa-trash"></i></a>
+    </li>
+</template>
+
+<template name="addSong">
+    <div class="addSong">
+        <form>
+            <label for="song">Add a new song:</label>
+            <input type="text" name="songTitle" placeholder="Song Title" required />
+        </form>
+    </div>
+</template>

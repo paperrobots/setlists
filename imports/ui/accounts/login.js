@@ -1,3 +1,5 @@
+import './login.html';
+
 Template.login.onRendered(function(){
     var validator = $('.login').validate({
         errorPlacement: function(error, element) {
