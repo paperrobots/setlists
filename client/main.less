@@ -29,6 +29,7 @@ h1, h2, h3, h4, h5, h6 {
 a {
     color: white;
     text-decoration: none;
+    transition: all 0.3s ease;
 }
 
 .btn {
@@ -239,8 +240,10 @@ label.error {
         text-align: center;
         display: inline-block;
         width: 80px;
+        height: 100%;
         padding: 20px 0;
         border-right: 1px solid rgba(255, 255, 255, 0.2);
+
         i {
             margin-bottom: 3px;
             display: block;
@@ -267,8 +270,6 @@ label.error {
     text-align: center;
     font-size: 12px;
     font-family: 'Raleway', sans-serif;
-
-
 
     h1 {
         padding-top: 50px;
@@ -302,8 +303,6 @@ label.error {
         label {
             display: none;
         }
-
-
 
         a {
             display: block;
@@ -358,10 +357,11 @@ label.error {
 
     .inputs {
         display: inline-block;
-    width: 80%;
-    max-width: none;
-    min-width: 236px;
-    height: 76px;
+        width: 80%;
+        max-width: none;
+        min-width: 236px;
+        height: 100%;
+
         .inner {
             display: flex;
             align-items: center;
