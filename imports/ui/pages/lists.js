@@ -7,7 +7,7 @@ Template.lists.onCreated(function(){
 Template.lists.helpers({
     'list': function(){
         var currentUser = Meteor.userId();
-        return Lists.find({ createdBy: currentUser }, {sort: {gigDate: -1}});
+        return Lists.find({ createdBy: currentUser }, {sort: {gigDate: 1}});
     }
 });
 
